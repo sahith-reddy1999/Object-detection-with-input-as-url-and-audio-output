@@ -3,7 +3,7 @@
 This project uses YOLOv3 for real-time object detection on images fetched from URLs. The detected objects and their confidence scores are displayed on the image, and the system speaks the detected objects aloud using Python's `pyttsx3` library.
 
 ## Features:
-- Upload or paste a URL of an image to detect objects.
+- paste a URL of an image to detect objects.
 - Object detection on the image using the YOLOv3 model.
 - Audio alerts for detected objects.
 - The detected objects with their confidence scores are shown below the image.
