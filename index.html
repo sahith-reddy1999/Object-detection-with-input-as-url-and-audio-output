@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection from URL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        #result img {
+            max-width: 100%;
+            height: auto;
+        }
+        #object-details {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Object Detection from URL</h1>
+    <p>Enter an image URL below to perform object detection:</p>
+    <input type="text" id="image-url" placeholder="Paste image URL here">
+    <br>
+    <button onclick="processUrl()">Process Image</button>
+
+    <div id="result">
+        <img id="image-result" src="" alt="">
+    </div>
+    <div id="object-details"></div>
+
+    <script>
+        async function processUrl() {
+            const url = document.getElementById('image-url').value;
+            if (!url) {
+                alert("Please enter a valid URL.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("url", url);
+
+            const response = await fetch("/process_url", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            // Check if there's an error in the response
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            // Show the detected image with bounding boxes
+            const imageElement = document.getElementById("image-result");
+            imageElement.src = "data:image/jpeg;base64," + data.image;
+
+            // Display object details (detected objects)
+            const detailsElement = document.getElementById("object-details");
+            detailsElement.innerHTML = "";
+            data.objects.forEach(object => {
+                detailsElement.innerHTML += `<p>${object}</p>`;
+            });
+        }
+    </script>
+</body>
+</html>
